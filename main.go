@@ -9,6 +9,7 @@ import (
 	// "fmt" has methods for formatted I/O operations (like printing to the console)
 	"fmt"
 	// The "net/http" library has methods to implement HTTP clients and servers
+	"log"
 	"net/http"
 
 	"example.com/accounting/src"
@@ -17,7 +18,8 @@ import (
 func main() {
 	// Declare a new router
 	var r = src.NewServer()
-	http.ListenAndServe(":8080", r())
+	log.Printf("Server stopped, err: %v", r.Run(":8073"))
+	// http.ListenAndServe(":8080", r)
 }
 
 // "handler" is our handler function. It has to follow the function signature of a ResponseWriter and Request type

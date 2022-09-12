@@ -5,12 +5,14 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"example.com/accounting/src/routes"
+	"example.com/accounting/src/db"
 )
 
 func NewServer() *gin.Engine {
 
 	router := gin.New()
-
+	DB := db.MakeDB()
+	controller := routes.Controller{DB}
 	// var envVars = utils.GetEnvVars()
 
 	// if envVars.DebugMode {
@@ -27,7 +29,7 @@ func NewServer() *gin.Engine {
 	// static files serving
 	router.Static("/images", "./images")
 
-	routes.MakeRouters(router)
+	routes.MakeRouters(router, controller)
 	return router
 
 }

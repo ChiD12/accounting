@@ -6,17 +6,17 @@ import (
 
 // NewRouter <function>
 // is used to create a GIN engine instance where all controller and routes will be placed
-func MakeRouters(router *gin.Engine) *gin.Engine {
+func MakeRouters(router *gin.Engine, controller Controller) *gin.Engine {
 
 	// endpoints
 	v1 := router.Group("v1")
 	{
 		news := v1.Group("auth")
 		{
-			controllers := Controller{}
+			controllers := controller
 
 			news.GET("/", controllers.GetUsers)
-			news.GET("/sources", controllers.Login)
+			news.GET("/sources", controllers.SignUp)
 			news.GET("/types", controllers.Login)
 		}
 	}
