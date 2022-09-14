@@ -15,9 +15,9 @@ func MakeRouters(router *gin.Engine, controller Controller) *gin.Engine {
 		{
 			controllers := controller
 
-			news.GET("/", controllers.GetUsers)
-			news.GET("/sources", controllers.SignUp)
-			news.GET("/types", controllers.Login)
+			news.GET("/getUser/:email", controllers.GetUser)
+			news.POST("/signup", controllers.SignUp)
+			news.GET("/login", controllers.Login)
 		}
 	}
 

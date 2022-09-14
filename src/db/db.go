@@ -2,8 +2,6 @@ package db
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 
@@ -11,6 +9,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+
+	"example.com/accounting/src/db/dao"
 )
 
 type DB struct {
@@ -45,33 +45,26 @@ func MakeDB() DB {
 
 	return DB{client}
 }
-func (db DB) GetUser() {
+func (db DB) GetUser(email string) (dao.UserDAO, error) {
 	coll := db.client.Database("Accounting").Collection("User")
 
-	var result bson.M
-	err := coll.FindOne(context.TODO(), bson.D{{Key: "User", Value: "hi"}}).Decode(&result)
-	if err == mongo.ErrNoDocuments {
-		fmt.Printf("No document was found with the title %s\n", "test")
-		return
-	}
-	if err != nil {
-		panic(err)
-	}
-	jsonData, err := json.MarshalIndent(result, "", "    ")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Printf("%s\n", jsonData)
+	var res dao.UserDAO
+	err := coll.FindOne(context.TODO(), bson.D{{Key: "User", Value: email}}).Decode(&res)
+
+	return res, err
 }
 
-func (db DB) CreateUser(createUser CreateUser) string {
+func (db DB) CreateUser(createUser CreateUser) (dao.UserDAO, error) {
 	coll := db.client.Database("Accounting").Collection("User")
-	doc := bson.D{{"User", "test"}, {"Pass", "123"}}
+
+	doc := bson.D{{"User", createUser.User}, {"Pass", createUser.Pass}, {"Email", createUser.Email}}
 	result, err := coll.InsertOne(context.TODO(), doc)
 	if err != nil {
-		panic(err)
+		return dao.UserDAO{}, err
 	}
 
-	fmt.Printf("result.InsertedID: %v\n", result.InsertedID)
-	return fmt.Sprintf("%v", result.InsertedID)
+	var res dao.UserDAO
+	err = coll.FindOne(context.TODO(), bson.D{{Key: "_id", Value: result.InsertedID}}).Decode(&res)
+
+	return res, err
 }

@@ -1,6 +1,6 @@
-package dao
+package models
 
-type UserDAO struct {
+type User struct {
 	Id    string
 	Email string
 	User  string

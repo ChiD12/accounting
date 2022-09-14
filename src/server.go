@@ -4,15 +4,17 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
-	"example.com/accounting/src/routes"
 	"example.com/accounting/src/db"
+	"example.com/accounting/src/routes"
+	"example.com/accounting/src/services"
 )
 
 func NewServer() *gin.Engine {
 
 	router := gin.New()
 	DB := db.MakeDB()
-	controller := routes.Controller{DB}
+	service := services.MakeService(DB)
+	controller := routes.Controller{Service: service}
 	// var envVars = utils.GetEnvVars()
 
 	// if envVars.DebugMode {
