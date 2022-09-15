@@ -24,6 +24,7 @@ func NewServer() *gin.Engine {
 	// }
 
 	// middlewares
+
 	router.Use(gin.Recovery())
 	router.Use(gin.Logger())
 	router.Use(cors.Default())
