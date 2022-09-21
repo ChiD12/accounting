@@ -18,7 +18,7 @@ import (
 func main() {
 	// Declare a new router
 	var r = src.NewServer()
-	log.Printf("Server stopped, err: %v", http.ListenAndServe(":8081", r))
+	log.Printf("Server stopped, err: %v", http.ListenAndServe(":8050", r))
 	// http.ListenAndServe(":8080", r)
 	// r.Run(":8072")
 }

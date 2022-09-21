@@ -19,10 +19,23 @@ type Controller struct {
 // is used to handle get action of news controller which will return <count> number of news.
 // url: /v1/news?count=80 , by default <count> = 50
 func (nc Controller) Login(c *gin.Context) {
+	loginParam := validators.LoginParam{}
+	err := c.BindJSON(&loginParam)
+
+	if err != nil {
+		c.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	token, err := nc.Service.Login(loginParam)
+
+	if err != nil {
+		c.AbortWithError(http.StatusNotFound, err)
+		return
+	}
 
 	c.JSON(200, gin.H{
-		"method":  "v1/news",
-		"message": "Hello from Get function!",
+		"token": token,
 	})
 }
 

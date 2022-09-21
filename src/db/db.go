@@ -49,7 +49,7 @@ func (db DB) GetUser(email string) (dao.UserDAO, error) {
 	coll := db.client.Database("Accounting").Collection("User")
 
 	var res dao.UserDAO
-	err := coll.FindOne(context.TODO(), bson.D{{Key: "User", Value: email}}).Decode(&res)
+	err := coll.FindOne(context.TODO(), bson.D{{Key: "Email", Value: email}}).Decode(&res)
 
 	return res, err
 }
